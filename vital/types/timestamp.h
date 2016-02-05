@@ -194,6 +194,8 @@ private:
 inline std::ostream& operator<< ( std::ostream& str, timestamp const& obj )
 { str << obj.pretty_print().c_str(); return str; }
 
+bool VITAL_EXPORT operator== ( timestamp const& lhs, timestamp const& rhs );
+
 } } // end namespace
 
 #endif /* _VITAL_TIMESTAMP_H_ */

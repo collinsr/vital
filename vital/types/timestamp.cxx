@@ -146,4 +146,14 @@ std::string timestamp
   return str.str();
 }
 
+bool
+operator==( timestamp const& lhs, timestamp const& rhs )
+{
+  // invalid timestamps are never equal, even to each other.
+  if ((! lhs.is_valid()) || (! rhs.is_valid() )) return false;
+
+  return ( (lhs.get_time_usec() == rhs.get_time_usec()) &&
+           (lhs.get_frame() == rhs.get_frame() ));
+}
+
 } } // end namespace
