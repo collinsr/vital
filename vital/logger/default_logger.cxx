@@ -1,5 +1,5 @@
 /*ckwg +29
- * Copyright 2015 by Kitware, Inc.
+ * Copyright 2015-2016 by Kitware, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,6 +40,8 @@
 #include <iostream>
 #include <string.h>
 #include <locale>
+
+#include <kwiversys/SystemTools.hxx>
 
 namespace kwiver {
 namespace vital {
@@ -82,7 +84,9 @@ public:
   default_logger( logger_ns::logger_factory_default* p, std::string const& name )
     : kwiver_logger( p, name ),
     m_logLevel( kwiver_logger::LEVEL_TRACE )
-  { }
+  {
+    m_output_time = ( kwiversys::SystemTools::GetEnv( "KWIVER_LOGGER_SUPPRESS_TIME" ) != 0 );
+  }
 
   virtual ~default_logger() VITAL_DEFAULT_DTOR
 
@@ -201,7 +205,7 @@ private:
 
     // Format this message on the stream
 
-    // Get the current time in milliseconds, creating a formatted
+    // If requested, get the current time in milliseconds, creating a formatted
     // string for log message.
     high_resolution_clock::time_point p = high_resolution_clock::now();
 
@@ -221,11 +225,13 @@ private:
       std::ostream* str = &get_stream();
       while ( getline( ss, msg_part ) )
       {
-        writeTime( *str, t );
-        *str
+        if ( m_output_time )
+        {
+          writeTime( *str, t );
           // << std::put_time(std::localtime(&t), "%F %T")
-           << '.' << fractional_seconds
-           << ' ' << level_str << ' ' << location << msg_part << '\n';
+          *str << '.' << fractional_seconds << ' ';
+        }
+        *str << level_str << ' ' << location << msg_part << '\n';
       }
     }
   }
@@ -257,6 +263,8 @@ private:
   std::mutex                   m_formatter_mtx;
 
   static std::ostream*         s_output_stream;
+
+  bool                         m_output_time;
 
 }; // end class logger
 
