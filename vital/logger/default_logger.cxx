@@ -85,7 +85,7 @@ public:
     : kwiver_logger( p, name ),
     m_logLevel( kwiver_logger::LEVEL_TRACE )
   {
-    m_output_time = ( kwiversys::SystemTools::GetEnv( "KWIVER_LOGGER_SUPPRESS_TIME" ) != 0 );
+    m_output_time = ( kwiversys::SystemTools::GetEnv( "KWIVER_LOGGER_SUPPRESS_TIME" ) == 0 );
   }
 
   virtual ~default_logger() VITAL_DEFAULT_DTOR
