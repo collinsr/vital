@@ -205,7 +205,7 @@ private:
 
     // Format this message on the stream
 
-    // If requested, get the current time in milliseconds, creating a formatted
+    // Get the current time in milliseconds, creating a formatted
     // string for log message.
     high_resolution_clock::time_point p = high_resolution_clock::now();
 
